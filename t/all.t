@@ -90,16 +90,25 @@ Crypt::Rijndael_PP_a::set_blocksize(16);
 
 my $got_rijndael;
 if(eval {
-	use Crypt::Rijndael;
+	require Crypt::Rijndael;
 	1;
 }) {
 	$got_rijndael = 1;
 	# Excellent. My good friend Crypt::Rijndael exists. Let's try some stuff
 }
+my $got_cbc;
+if(eval {
+	require Crypt::CBC;
+	1;
+}) {
+	$got_cbc = 1;
+	# Crypt::CBC exists, so we can test against that.
+}
 
 SKIP: {
 
 	skip "I've not yet got these to work...", 2;
+	no strict "subs";
 	my $cipher=new Crypt::Rijndael(unpack("H*", $real_key), Crypt::Rijndael::MODE_ECB);
 	cmp_ok($cipher->decrypt($ctext), 'eq', $test_string); # 21
 
@@ -113,10 +122,10 @@ my $sample_long="This is some text that, well, basically exists only for the pur
 my $ctext_cbc=Crypt::Rijndael_PP_a::block_encrypt_CBC($ivs{16}, $sample_long ,$keys{16});
 
 SKIP: {
-	skip "No Crypt::Rijndael to test against", 1 unless $got_rijndael;
+	skip "No Crypt::Rijndael/Crypt::CBC to test against", 1 unless($got_rijndael and $got_cbc);
 	# standard openssl settings
 
-	 use Crypt::CBC;
+	 require Crypt::CBC;
 	 my $cipher = Crypt::CBC->new( {'key'             => $keys{16},
 															 'cipher'          => 'Rijndael',
 															 'iv'              => $ivs{16},
@@ -127,6 +136,8 @@ SKIP: {
 
 	cmp_ok($ctext_cbc, 'eq', $cipher->encrypt($sample_long)); # 22
 }
+SKIP: {
+	skip "No Crypt::CBC to try", 1 unless($got_cbc);
 					 use Crypt::CBC;
 					 my $cipher = Crypt::CBC->new( {'key'             => $keys{16},
 																			 'cipher'          => 'Rijndael_PP_a',
@@ -137,6 +148,7 @@ SKIP: {
 																		});
 
 	cmp_ok($ctext_cbc, 'eq', $cipher->encrypt($sample_long), "Native CBC vs Crypt::CBC"); # 23
+}
 
 SKIP: {
 	skip "No Crypt::Rijndael", 4 unless $got_rijndael;
@@ -149,7 +161,7 @@ SKIP: {
 	TODO: {
 		local $TODO="Crypt::Rijndael is AES!";
 					 use Crypt::CBC;
-					 $cipher = Crypt::CBC->new( {'key'             => $keys{32},
+					 my $cipher = Crypt::CBC->new( {'key'             => $keys{32},
 																			 'cipher'          => 'Rijndael',
 																			 'iv'              => $ivs{32},
 																			 'regenerate_key'  => 0,   # default true
@@ -167,8 +179,10 @@ SKIP: {
 	Crypt::Rijndael_PP_a::set_blocksize(16);
 	my $longkey_ctext=Crypt::Rijndael_PP_a::block_encrypt_CBC($ivs{16}, $sample_long ,$keys{32});
 
-					 use Crypt::CBC;
-					 $cipher = Crypt::CBC->new( {'key'             => $keys{32},
+	SKIP: {
+		skip "No Crypt::CBC to try", 1 unless($got_cbc);
+					 require Crypt::CBC;
+					 my $cipher = Crypt::CBC->new( {'key'             => $keys{32},
 																			 'cipher'          => 'Rijndael',
 																			 'iv'              => $ivs{16},
 																			 'regenerate_key'  => 0,   # default true
@@ -177,6 +191,7 @@ SKIP: {
 																		});
 
 					cmp_ok($cipher->decrypt($longkey_ctext), 'eq', $sample_long, "Long key CBC, comparing with Crypt::CBC(Crypt::Rijndael)"); # 26
+	}
 
 	cmp_ok(Crypt::Rijndael_PP_a::block_decrypt_CBC($ivs{16}, $longkey_ctext ,$keys{32}), 'eq', $sample_long);
 
