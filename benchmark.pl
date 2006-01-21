@@ -37,7 +37,7 @@ $ivs{32}=$long_iv;
 $ivs{24}=substr($long_iv,0,24);
 $ivs{16}=substr($long_iv,0,16);
 {
-	open(IFILE, "<", "Crypt/bwulf10.txt") or die;
+	open(IFILE, "<", "test_data/bwulf10.txt") or die;
 	local $/=undef;
 	my $huge_ptext=<IFILE>;
 	close IFILE;
