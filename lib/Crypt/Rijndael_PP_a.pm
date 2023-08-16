@@ -125,7 +125,7 @@ sub set_blocksize {
             return 1;
         } else {
             return;
-        }    
+        }
     }
 }
 
@@ -163,7 +163,7 @@ Another Crypt::CBC hook. Returns the (global or object) chosen block size, in by
 sub blocksize {
     if(@_ and ref $_[0]) {
         my $self=shift;
-        return $self->{block_words}*4;    
+        return $self->{block_words}*4;
     } else {
         return $g_block_words*4;
     }
@@ -291,11 +291,11 @@ sub dot($$) {
 	my ($l, $r)=@_;
 
     return 0 unless($l and $r);
-    
+
     if(@g_dot_cache) {
         return $g_dot_cache[$l][$r];
     }
-    
+
 	my $result=0;
 	my $tv=$l;
 	for(0 .. 7) {
@@ -347,23 +347,23 @@ sub mix_col {
     my (@col)=@_;
     if($g_all_cache) {
         return (
-            ($g_dot_cache[02][$col[0]] ^ 
-                $g_dot_cache[03][$col[1]] ^ 
-                    $col[2] ^ 
+            ($g_dot_cache[02][$col[0]] ^
+                $g_dot_cache[03][$col[1]] ^
+                    $col[2] ^
                         $col[3] ),
-            ( $col[0] ^ 
-                $g_dot_cache[02][$col[1]] ^ 
-                    $g_dot_cache[03][$col[2]] ^ 
+            ( $col[0] ^
+                $g_dot_cache[02][$col[1]] ^
+                    $g_dot_cache[03][$col[2]] ^
                         $col[3] ),
-            ( $col[0] ^ 
-                $col[1] ^ 
-                    $g_dot_cache[02][$col[2]] ^ 
+            ( $col[0] ^
+                $col[1] ^
+                    $g_dot_cache[02][$col[2]] ^
                         $g_dot_cache[03][$col[3]]),
-            ($g_dot_cache[03][$col[0]] ^ 
-                $col[1] ^ 
-                    $col[2] ^ 
+            ($g_dot_cache[03][$col[0]] ^
+                $col[1] ^
+                    $col[2] ^
                         $g_dot_cache[02][$col[3]])
-        )    
+        )
     } else {
         return (
             (dot(02,$col[0]) ^ dot(03,$col[1]) ^        $col[2]  ^        $col[3] ),
@@ -382,23 +382,23 @@ sub mix_col_b {
     my ($block_words, @col)=@_;
     if($g_all_cache) {
         return (map {
-            ($g_dot_cache[02][$col[($_*4)+0]] ^ 
-                $g_dot_cache[03][$col[($_*4)+1]] ^ 
-                    $col[($_*4)+2] ^ 
+            ($g_dot_cache[02][$col[($_*4)+0]] ^
+                $g_dot_cache[03][$col[($_*4)+1]] ^
+                    $col[($_*4)+2] ^
                         $col[($_*4)+3] ),
-            ( $col[($_*4)+0] ^ 
-                $g_dot_cache[02][$col[($_*4)+1]] ^ 
-                    $g_dot_cache[03][$col[($_*4)+2]] ^ 
+            ( $col[($_*4)+0] ^
+                $g_dot_cache[02][$col[($_*4)+1]] ^
+                    $g_dot_cache[03][$col[($_*4)+2]] ^
                         $col[($_*4)+3] ),
-            ( $col[($_*4)+0] ^ 
-                $col[($_*4)+1] ^ 
-                    $g_dot_cache[02][$col[($_*4)+2]] ^ 
+            ( $col[($_*4)+0] ^
+                $col[($_*4)+1] ^
+                    $g_dot_cache[02][$col[($_*4)+2]] ^
                         $g_dot_cache[03][$col[($_*4)+3]]),
-            ($g_dot_cache[03][$col[($_*4)+0]] ^ 
-                $col[($_*4)+1] ^ 
-                    $col[($_*4)+2] ^ 
+            ($g_dot_cache[03][$col[($_*4)+0]] ^
+                $col[($_*4)+1] ^
+                    $col[($_*4)+2] ^
                         $g_dot_cache[02][$col[($_*4)+3]])
-        } (0 .. ($block_words-1)));    
+        } (0 .. ($block_words-1)));
     } else {
         return (map {
             (dot(02,$col[($_*4)+0]) ^ dot(03,$col[($_*4)+1]) ^        $col[($_*4)+2]  ^        $col[($_*4)+3] ),
@@ -416,23 +416,23 @@ sub inv_mix_col {
     my (@col)=@_;
     if($g_all_cache) {
     return (
-        ($g_dot_cache[0x0e][$col[0]] ^ 
-            $g_dot_cache[0x0b][$col[1]] ^ 
-                $g_dot_cache[0x0d][$col[2]] ^ 
+        ($g_dot_cache[0x0e][$col[0]] ^
+            $g_dot_cache[0x0b][$col[1]] ^
+                $g_dot_cache[0x0d][$col[2]] ^
                     $g_dot_cache[0x09][$col[3]]),
-        ($g_dot_cache[0x09][$col[0]] ^ 
-            $g_dot_cache[0x0e][$col[1]] ^ 
-                $g_dot_cache[0x0b][$col[2]] ^ 
+        ($g_dot_cache[0x09][$col[0]] ^
+            $g_dot_cache[0x0e][$col[1]] ^
+                $g_dot_cache[0x0b][$col[2]] ^
                     $g_dot_cache[0x0d][$col[3]]),
-        ($g_dot_cache[0x0d][$col[0]] ^ 
-            $g_dot_cache[0x09][$col[1]] ^ 
-                $g_dot_cache[0x0e][$col[2]] ^ 
+        ($g_dot_cache[0x0d][$col[0]] ^
+            $g_dot_cache[0x09][$col[1]] ^
+                $g_dot_cache[0x0e][$col[2]] ^
                     $g_dot_cache[0x0b][$col[3]]),
-        ($g_dot_cache[0x0b][$col[0]] ^ 
-            $g_dot_cache[0x0d][$col[1]] ^ 
-                $g_dot_cache[0x09][$col[2]] ^ 
+        ($g_dot_cache[0x0b][$col[0]] ^
+            $g_dot_cache[0x0d][$col[1]] ^
+                $g_dot_cache[0x09][$col[2]] ^
                     $g_dot_cache[0x0e][$col[3]])
-    )    
+    )
     } else {
     return (
         (dot(0x0e,$col[0]) ^ dot(0x0b,$col[1]) ^ dot(0x0d,$col[2]) ^ dot(0x09,$col[3])),
@@ -450,23 +450,23 @@ sub inv_mix_col_b {
     my ($block_words, @col)=@_;
     if($g_all_cache) {
     return (map {
-        ($g_dot_cache[0x0e][$col[($_*4)+0]] ^ 
-            $g_dot_cache[0x0b][$col[($_*4)+1]] ^ 
-                $g_dot_cache[0x0d][$col[($_*4)+2]] ^ 
+        ($g_dot_cache[0x0e][$col[($_*4)+0]] ^
+            $g_dot_cache[0x0b][$col[($_*4)+1]] ^
+                $g_dot_cache[0x0d][$col[($_*4)+2]] ^
                     $g_dot_cache[0x09][$col[($_*4)+3]]),
-        ($g_dot_cache[0x09][$col[($_*4)+0]] ^ 
-            $g_dot_cache[0x0e][$col[($_*4)+1]] ^ 
-                $g_dot_cache[0x0b][$col[($_*4)+2]] ^ 
+        ($g_dot_cache[0x09][$col[($_*4)+0]] ^
+            $g_dot_cache[0x0e][$col[($_*4)+1]] ^
+                $g_dot_cache[0x0b][$col[($_*4)+2]] ^
                     $g_dot_cache[0x0d][$col[($_*4)+3]]),
-        ($g_dot_cache[0x0d][$col[($_*4)+0]] ^ 
-            $g_dot_cache[0x09][$col[($_*4)+1]] ^ 
-                $g_dot_cache[0x0e][$col[($_*4)+2]] ^ 
+        ($g_dot_cache[0x0d][$col[($_*4)+0]] ^
+            $g_dot_cache[0x09][$col[($_*4)+1]] ^
+                $g_dot_cache[0x0e][$col[($_*4)+2]] ^
                     $g_dot_cache[0x0b][$col[($_*4)+3]]),
-        ($g_dot_cache[0x0b][$col[($_*4)+0]] ^ 
-            $g_dot_cache[0x0d][$col[($_*4)+1]] ^ 
-                $g_dot_cache[0x09][$col[($_*4)+2]] ^ 
+        ($g_dot_cache[0x0b][$col[($_*4)+0]] ^
+            $g_dot_cache[0x0d][$col[($_*4)+1]] ^
+                $g_dot_cache[0x09][$col[($_*4)+2]] ^
                     $g_dot_cache[0x0e][$col[($_*4)+3]])
-    } (0 .. ($block_words-1)))    
+    } (0 .. ($block_words-1)))
     } else {
     return (map {
         (dot(0x0e,$col[($_*4)+0]) ^ dot(0x0b,$col[($_*4)+1]) ^ dot(0x0d,$col[($_*4)+2]) ^ dot(0x09,$col[($_*4)+3])),
@@ -531,7 +531,7 @@ sub make_shiftrow_map {
     }
 }
 
-# The shift_rows() function, a core part of Rijndael. This shifts data about - 
+# The shift_rows() function, a core part of Rijndael. This shifts data about -
 # cyclically - in a way determined by the block length.
 # Note that a row in this sense is *perpendicular* to the data stream, while
 # a column is parallel.
@@ -540,11 +540,11 @@ sub shift_rows {
   my (@state_b)=@_;
   my $col_len=4;
   my $row_len=scalar(@state_b)/4;
-  
+
   if(%g_shiftrow_map) {
     return @state_b[@{$g_shiftrow_map{$row_len}}];
   }
-  
+
   my @c=@{$shift_for_block_len{scalar(@state_b)/4}};
   for my $row_n (0 .. $#c) {
     # Grab the lossage first
@@ -558,7 +558,7 @@ sub shift_rows {
     ];
 
     @state_b[map {$row_n+$col_len*$_} (0 .. $row_len-1)] = (@d2,@d1);
-    
+
   }
   return @state_b;
 }
@@ -570,11 +570,11 @@ sub inv_shift_rows {
   my (@state_b)=@_;
   my $col_len=4;
   my $row_len=scalar(@state_b)/4;
-  
+
   if(%g_inv_shiftrow_map) {
     return @state_b[@{$g_inv_shiftrow_map{$row_len}}];
-  }  
-  
+  }
+
   my @c=@{$shift_for_block_len{scalar(@state_b)/4}};
   for my $row_n (0 .. $#c) {
     # Grab the lossage first
@@ -588,7 +588,7 @@ sub inv_shift_rows {
     ];
 
     @state_b[map {$row_n+$col_len*$_} (0 .. $row_len-1)] = (@d1,@d2);
-    
+
   }
   return @state_b;
 }
@@ -602,7 +602,7 @@ sub roundn($$;$) {
 
     $block_words||=length($input)/4;
     my $row_len=$block_words;
-    
+
     my @bytes_n=map {$g_sbox[$_]} unpack("C*", $input);
     if($g_all_cache) {
         @bytes_n=@bytes_n[@{$g_shiftrow_map{$block_words}}];
@@ -613,7 +613,7 @@ sub roundn($$;$) {
     # Tune this - jim
     my @bytes_n_t=mix_col_b($block_words, @bytes_n);
     $input=pack("C*", @bytes_n_t);
-    
+
     return "$input"^"$round_key";
 }
 
@@ -622,15 +622,15 @@ sub roundn($$;$) {
 
 sub inv_roundn($$;$) {
     my ($input, $round_key, $block_words)=@_;
-    
+
     $input="$input"^"$round_key";
     my @bytes_n=unpack("C*", $input);
 
     $block_words||=length($input)/4;
     my $row_len=$block_words;
-    
+
     my @bytes_n_t=inv_mix_col_b($block_words, @bytes_n);
-    
+
     @bytes_n=@bytes_n_t;
 
     if($g_all_cache) {
@@ -638,10 +638,10 @@ sub inv_roundn($$;$) {
     } else {
         @bytes_n=inv_shift_rows(@bytes_n);
     }
-    
+
     # convert to use tr for the s-box ?
     $input=pack("C*", map {$g_inv_sbox[$_]} @bytes_n);
-    
+
     return $input;
 }
 
@@ -650,11 +650,11 @@ sub inv_roundn($$;$) {
 
 sub roundl($$;$) {
     my ($input, $round_key, $block_words)=@_;
-    
+
     $block_words||=length($input)/4;
-    
+
     # convert to use tr for the s-box
-    my @bytes_n=map {$g_sbox[$_]} unpack("C*", $input);    
+    my @bytes_n=map {$g_sbox[$_]} unpack("C*", $input);
     if($g_all_cache) {
         @bytes_n=@bytes_n[@{$g_shiftrow_map{$block_words}}];
     } else {
@@ -662,7 +662,7 @@ sub roundl($$;$) {
     }
 
     $input=pack("C*", @bytes_n);
-        
+
     return "$input"^"$round_key";
 }
 
@@ -672,20 +672,20 @@ sub roundl($$;$) {
 sub inv_roundl($$;$) {
     my ($input, $round_key, $block_words)=@_;
     # convert to use tr for the s-box
-    
+
     $block_words||=length($input)/4;
-    
+
     $input="$input"^"$round_key";
-    
-    my @bytes_n=map {$g_inv_sbox[$_]} unpack("C*", $input);    
-    
+
+    my @bytes_n=map {$g_inv_sbox[$_]} unpack("C*", $input);
+
     if($g_all_cache) {
         @bytes_n=@bytes_n[@{$g_inv_shiftrow_map{$block_words}}];
     } else {
         @bytes_n=inv_shift_rows(@bytes_n);
     }
     $input=pack("C*", @bytes_n);
-        
+
     return $input;
 }
 
@@ -736,7 +736,7 @@ sub expand_key_le6($$) { # expand to blocklen*(rounds+1) bits
         #0x1000000<<($_-1)
         pack("C*", $temp_v=dot(02,$temp_v) ,0,0,0)
     } (2 .. int($block_words * ($rounds + 1)/$key_words))
-    
+
     );
 
     for(my $i=$key_words; $i< $block_words * ($rounds + 1); $i++) {
@@ -750,14 +750,14 @@ sub expand_key_le6($$) { # expand to blocklen*(rounds+1) bits
             # tr would be great here again.
             $p_temp=
                 pack("C*", map {$g_sbox[$_]} unpack("C*",
-                  $p_temp  
-                )); 
-            $p_temp= "$p_temp"^"$p_round_constant[$i/$key_words]"; 
+                  $p_temp
+                ));
+            $p_temp= "$p_temp"^"$p_round_constant[$i/$key_words]";
         }
-        
+
         $ek_words[$i]="$ek_words[$i-$key_words]"^"$p_temp";
     }
-    return join("", @ek_words); 
+    return join("", @ek_words);
 }
 
 # Expands keys of > 6 words size (256bit)
@@ -780,7 +780,7 @@ sub expand_key_gt6 { # expand to blocklen*(rounds+1) bits
         #0x1000000<<($_-1)
         pack("C*", $temp_v=dot(02,$temp_v) ,0,0,0)
     } (2 .. int($block_words * ($rounds + 1)/$key_words))
-    
+
     );
 
     for(my $i=$key_words; $i< $block_words * ($rounds + 1); $i++) {
@@ -794,18 +794,18 @@ sub expand_key_gt6 { # expand to blocklen*(rounds+1) bits
             # tr would be great here again.
             $p_temp=
                 pack("C*", map {$g_sbox[$_]} unpack("C*",
-                  $p_temp  
-                )); 
-          
-            $p_temp= "$p_temp"^"$p_round_constant[$i/$key_words]"; 
-          
+                  $p_temp
+                ));
+
+            $p_temp= "$p_temp"^"$p_round_constant[$i/$key_words]";
+
         } elsif($i%$key_words == 4) {
             $p_temp=pack("C*", map {$g_sbox[$_]} unpack("C*",
-                  $p_temp  
+                  $p_temp
                 )
-            ); 
+            );
         }
-        
+
         $ek_words[$i]="$ek_words[$i-$key_words]"^"$p_temp";
     }
     return join("", @ek_words);
@@ -836,7 +836,7 @@ sub encrypt($$;$$) {
         $key=$self->{key};
         $block_words=$self->{block_words};
     } else {
-       ($plaintext, $key, $expanded_key)=@_; 
+       ($plaintext, $key, $expanded_key)=@_;
         $block_words=$g_block_words;
     }
     return unless grep {$_ == length($key)} @valid_keysizes_bytes;
@@ -844,7 +844,7 @@ sub encrypt($$;$$) {
     my $rounds=_round_count($block_words, length($key)/4);
     $expanded_key||=expand_key($key, $block_words);
     my $state=$plaintext;
-    
+
     my $blockl_b=$block_words*4;
     $state=round0($state, substr($expanded_key,0,$blockl_b));
     for(1 .. $rounds-1) {
@@ -870,7 +870,7 @@ sub decrypt($$;$$) {
         $key=$self->{key};
         $block_words=$self->{block_words};
     } else {
-       ($ciphertext, $key, $expanded_key)=@_; 
+       ($ciphertext, $key, $expanded_key)=@_;
         $block_words=$g_block_words;
     }
     return unless grep {$_ == length($key)} @valid_keysizes_bytes;
@@ -878,7 +878,7 @@ sub decrypt($$;$$) {
     my $rounds=_round_count($block_words, length($key)/4);
     $expanded_key||=expand_key($key, $block_words);
     my $state=$ciphertext;
-    
+
     my $blockl_b=$block_words*4;
     $state=inv_roundl($state, substr($expanded_key,$blockl_b*$rounds,$blockl_b), $block_words);
     for(reverse 1 .. $rounds-1) {
@@ -912,23 +912,23 @@ sub block_encrypt_CBC($$$) {
         return unless $self->set_blocksize(length $iv);
         $block_words=$self->{block_words};
     } else {
-        ($iv, $plaintext, $key)=@_;    
+        ($iv, $plaintext, $key)=@_;
         return unless set_blocksize(length $iv);
         $block_words=$g_block_words;
     }
-    
+
     return unless grep {$_ == length($key)} @valid_keysizes_bytes;
 
     my $current_block;
     my $last_block_e=$iv;
-    
+
     my $blockl_b=$block_words*4;
-    
+
     my $r_data="";
     $plaintext=pad_pkcs5($plaintext, $blockl_b);
-    
+
     my $expanded_key=expand_key($key, $block_words);
-    
+
     my $pt_l=length($plaintext);
     for(my $i=0;$blockl_b*$i<$pt_l;$i++) {
         $current_block=substr(
@@ -962,24 +962,24 @@ sub block_decrypt_CBC($$$) {
         return unless $self->set_blocksize(length $iv);
         $block_words=$self->{block_words};
     } else {
-        ($iv, $ciphertext, $key)=@_;    
+        ($iv, $ciphertext, $key)=@_;
         return unless set_blocksize(length $iv);
         $block_words=$g_block_words;
     }
-    return unless grep {$_ == length($key)} @valid_keysizes_bytes;    
+    return unless grep {$_ == length($key)} @valid_keysizes_bytes;
 
-    
+
     my $current_block;
     my $last_block_e=$iv;
-    
+
     my $blockl_b=$block_words*4;
 
 		return unless length($ciphertext)%$blockl_b==0;
 
     my $expanded_key=expand_key($key, $block_words);
-    
+
     my $ct_l=length($ciphertext);
-    
+
     my $r_data="";
     for(my $i=0;$blockl_b*$i<$ct_l;$i++) {
         $current_block=substr(
@@ -1010,10 +1010,10 @@ sub dump_fixed_arrays {
 			for my $y (0 .. 0xf) {
 				for my $x (0 .. 0xf) {
 					print '0x'.unpack("H*", pack("C", ${$arrays{$aname}}[($y*0x10) + $x])).", ";
-				}			
+				}
 				print "\n\t";
 			}
-			
+
 			print ");\n";
 		}
 		my %hashes=(g_shiftrow_map=>\%g_shiftrow_map, g_inv_shiftrow_map=>\%g_inv_shiftrow_map);
@@ -1023,15 +1023,15 @@ sub dump_fixed_arrays {
                 print "$key => [\n\t\t";
                 for my $y (0 .. ($key-1)) {
                     for my $x (0 .. 3) {
-                        printf("0x%.2x, ",  
+                        printf("0x%.2x, ",
                             ${$hashes{$hname}{$key}}[($y*4) + $x]);
-                    }			
+                    }
                     print "\n\t\t";
                 }
                 print "],\n\t";
 			}
 			print ");\n";
-		}      
+		}
 		my %darrays=(g_dot_cache=>\@g_dot_cache);
 		for my $aname (keys %darrays) {
 			print 'our @'.$aname."=(\n\t";
@@ -1043,16 +1043,16 @@ sub dump_fixed_arrays {
                 print "],\n\t";
 			}
 			print ");\n";
-		}    		
+		}
 }
 
 BEGIN {
-		if(defined @Crypt::Rijndael_PP_a::Cache::g_sbox) {
+		if(@Crypt::Rijndael_PP_a::Cache::g_sbox) {
 			@g_sbox=@Crypt::Rijndael_PP_a::Cache::g_sbox;
 			@g_inv_sbox=@Crypt::Rijndael_PP_a::Cache::g_inv_sbox;
-			
+
 			@g_dot_cache=@Crypt::Rijndael_PP_a::Cache::g_dot_cache;
-						
+
 			%g_shiftrow_map=%Crypt::Rijndael_PP_a::Cache::g_shiftrow_map;
 			%g_inv_shiftrow_map=%Crypt::Rijndael_PP_a::Cache::g_inv_shiftrow_map;
 			$g_all_cache=1;
@@ -1076,7 +1076,7 @@ makes some obviously broken (ie, badly padded) plaintext.
 Oh, and the POD needs reorganising.
 
 =head1 COPYRIGHT
-    
+
 This program is copyright (c) 2004, Jim Driscoll <jim[at]shellprompt.org>.
 
 All rights reserved.
