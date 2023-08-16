@@ -43,7 +43,7 @@ $ivs{16}=substr($long_iv,0,16);
 	my $before=time();
 	my $huge_ctext=Crypt::Rijndael_PP_a::block_encrypt_CBC($ivs{16}, $huge_ptext ,$keys{16});
 	my $after=time();
-	my $diff=$after-$before;
+	my $diff=$after-$before + 1;
 	my $size=length($huge_ptext)/1024;
 	diag sprintf("$diff seconds to encrypt a %.1fKiB file (%.1fKiB/s).", $size, $size/$diff);
 	$before=time();
@@ -55,4 +55,4 @@ $ivs{16}=substr($long_iv,0,16);
 
 	diag "Here's (a snippet of) the result of the decryption:";
 	diag "\n...".substr($new_huge_ptext, 40960, 256)."...";
-}	
+}
