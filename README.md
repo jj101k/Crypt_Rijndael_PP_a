@@ -8,6 +8,8 @@ to find the problem.
 
 Rijndael_PP_a in this case is supposed to mean "Rijndael Pure Perl (alternate)".
 
+You need Crypt::CBC to test this, eg. `cpan install Crypt::CBC`
+
 BUILDING
 
 Although this is a pure-perl version of Rijndael, the cache data (for size
